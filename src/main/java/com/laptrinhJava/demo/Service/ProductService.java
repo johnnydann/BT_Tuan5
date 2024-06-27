@@ -61,7 +61,19 @@ public class ProductService {
             throw new IllegalArgumentException("Not enough quantity in stock for product: " + product.getName());
         }
     }
-    public List<Product> searchProductsByName(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword);
+    public List<Product> searchProducts(String keyword) {
+        return productRepository.findByKeyword(keyword);
+    }
+
+    public List<Product> searchProductsByKeywordAndCategory(String keyword, Long categoryId) {
+        if (categoryId != null) {
+            return productRepository.findByKeywordAndCategory(keyword, categoryId);
+        } else {
+            return productRepository.findByKeyword(keyword);
+        }
+    }
+
+    public List<Product> searchProductsByKeywordAndCategoryName(String keyword, String categoryName) {
+        return productRepository.findByKeywordAndCategoryName(keyword, categoryName);
     }
 }
