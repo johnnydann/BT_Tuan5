@@ -1,6 +1,7 @@
 package com.laptrinhJava.demo.Controller;
 
 import com.laptrinhJava.demo.Model.Product;
+import com.laptrinhJava.demo.Model.Category;
 import com.laptrinhJava.demo.Service.CategoryService;
 import com.laptrinhJava.demo.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/products")
@@ -28,8 +32,15 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    private final Logger logger = Logger.getLogger(ProductController.class.getName());
+
     @Value("${upload.path}")
     private String uploadPath;
+
+    @ModelAttribute("categories")
+    public List<Category> populateCategories() {
+        return categoryService.getAllCategories();
+    }
 
     @GetMapping
     public String showProductList(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
@@ -83,35 +94,40 @@ public class ProductController {
 
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable Long id, @Valid Product product,
-                                BindingResult result, @RequestParam("images") MultipartFile imageFile) {
+                                @RequestParam("images") MultipartFile imageProduct,
+                                BindingResult result, Model model) {
         if (result.hasErrors()) {
             product.setId(id);
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "products/update-product";
         }
-        try {
-            Product existingProduct = productService.getProductById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
 
-            if (!imageFile.isEmpty()) {
-                byte[] bytes = imageFile.getBytes();
-                Path path = Paths.get(uploadPath + imageFile.getOriginalFilename());
-                Files.write(path, bytes);
-                product.setImage(imageFile.getOriginalFilename());
-            } else {
-                product.setImage(existingProduct.getImage());
+        if (imageProduct != null && !imageProduct.isEmpty()) {
+            try {
+                Path saveDirectoryPath = Paths.get("src/main/resources/static/images");
+                File saveDirectory = new File(saveDirectoryPath.toUri());
+
+                if (!saveDirectory.exists()) {
+                    saveDirectory.mkdirs();
+                }
+
+                String newImageFile = UUID.randomUUID() + ".png";
+                Path path = saveDirectoryPath.resolve(newImageFile);
+                Files.copy(imageProduct.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                product.setImage(newImageFile);
+
+                logger.info("Image saved at: " + path.toString());
+                logger.info("Product image file name: " + product.getImage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                model.addAttribute("product", product);
+                model.addAttribute("categories", categoryService.getAllCategories());
+                model.addAttribute("errorMessage", "Error saving image");
+                return "products/update-product";
             }
-
-            existingProduct.setName(product.getName());
-            existingProduct.setPrice(product.getPrice());
-            existingProduct.setDescription(product.getDescription());
-            existingProduct.setCategory(product.getCategory());
-            existingProduct.setQuantity(product.getQuantity()); // Update quantity
-
-            productService.updateProduct(existingProduct);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "products/update-product";
         }
+
+        productService.updateProduct(product);
         return "redirect:/products";
     }
 

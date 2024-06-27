@@ -1,95 +1,93 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-  <title th:text="${title} ?: 'Product'">Product</title>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
+  <!DOCTYPE html>
+  <html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+  <head>
+    <title th:text="${title} ?: 'Product'">Product</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
 
-    .container {
-      padding-top: 20px;
-    }
+      .container {
+        padding-top: 20px;
+      }
 
-    .product-card {
-      border: 1px solid #dee2e6;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
+      .product-card {
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
 
-    .product-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
+      .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
 
-    .product-card .card-body {
-      padding: 15px;
-    }
+      .product-card .card-body {
+        padding: 15px;
+      }
 
-    .product-card .card-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
+      .product-card .card-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
 
-    .product-card .card-text {
-      color: #6c757d;
-    }
+      .product-card .card-text {
+        color: #6c757d;
+      }
 
-    .product-card .btn {
-      width: 100%;
-    }
+      .product-card .btn {
+        width: 100%;
+      }
 
-    .add-to-cart-form {
-      display: flex;
-      align-items: center;
-    }
+      .add-to-cart-form {
+        display: flex;
+        align-items: center;
+      }
 
-    .add-to-cart-form input[type="number"] {
-      display: none; /* Ẩn khung quantity */
-    }
+      .add-to-cart-form input[type="number"] {
+        display: none; /* Ẩn khung quantity */
+      }
 
-    .btn-edit-delete {
-      display: flex;
-      gap: 5px;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-<section layout:fragment="content" class="container">
-  <h1 class="text-center mb-4">Products List</h1>
-  <div class="mb-3">
-    <a th:href="@{/products/add}" class="btn btn-primary">Add New Product</a>
-  </div>
-  <div class="row">
-    <div class="col-md-4" th:each="product : ${products}">
-      <div class="product-card">
-        <img th:src="@{'images/' + ${product.image}}" alt="Product Image">
-        <div class="card-body">
-          <h5 class="card-title" th:text="${product.name}"></h5>
-          <p class="card-text" th:text="'Price: $' + ${product.price}"></p>
-          <p class="card-text" th:text="${product.description}"></p>
-          <div class="add-to-cart-form">
-            <form th:action="@{/cart/add}" method="post">
-              <input type="number" name="quantity" min="1" value="1" class="form-control" th:id="'quantity_' + ${product.id}">
-              <input type="hidden" th:value="${product.id}" name="productId"/>
-              <button type="submit" class="btn btn-warning">Add to Cart</button>
-              <div class="btn-edit-delete">
-                <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
-                <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
-              </div>
-            </form>
+      .btn-edit-delete {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+  <section layout:fragment="content" class="container">
+    <h1 class="text-center mb-4">Products List</h1>
+    <div class="row">
+      <div class="col-md-4" th:each="product : ${products}">
+        <div class="product-card">
+          <img th:src="@{'images/' + ${product.image}}" alt="Product Image">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${product.name}"></h5>
+            <p class="card-text" th:text="'Price: $' + ${product.price}"></p>
+            <p class="card-text" th:text="${product.description}"></p>
+            <div class="add-to-cart-form">
+              <form th:action="@{/cart/add}" method="post">
+                <input type="number" name="quantity" min="1" value="1" class="form-control" th:id="'quantity_' + ${product.id}">
+                <input type="hidden" th:value="${product.id}" name="productId"/>
+                <button type="submit" class="btn btn-warning">Add to Cart</button>
+                <div sec:authorize="hasAuthority('ADMIN')" class="btn-edit-delete">
+                  <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
+                  <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-</body>
-</html>
+  </section>
+  </body>
+  </html>
