@@ -1,7 +1,7 @@
 package com.laptrinhJava.demo.Controller;
 
-import com.laptrinhJava.demo.Model.Product;
 import com.laptrinhJava.demo.Model.Category;
+import com.laptrinhJava.demo.Model.Product;
 import com.laptrinhJava.demo.Service.CategoryService;
 import com.laptrinhJava.demo.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +42,35 @@ public class ProductController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping
-    public String showProductList(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
-        List<Product> products;
-        if (keyword != null && !keyword.isEmpty()) {
-            products = productService.searchProductsByName(keyword);
+    @GetMapping("/search")
+    public String searchProduct(@RequestParam("keyword") String keyword,
+                                @RequestParam(value = "category", required = false) Long categoryId,
+                                @RequestParam(value = "categoryName", required = false) String categoryName,
+                                Model model) {
+        List<Product> searchResults;
+        if (categoryId != null) {
+            searchResults = productService.searchProductsByKeywordAndCategory(keyword, categoryId);
+        } else if (categoryName != null && !categoryName.isEmpty()) {
+            searchResults = productService.searchProductsByKeywordAndCategoryName(keyword, categoryName);
         } else {
-            products = productService.getAllProducts();
+            searchResults = productService.searchProducts(keyword);
         }
-        model.addAttribute("products", products);
-        model.addAttribute("keyword", keyword);
-        return "/products/product-list";
+        model.addAttribute("products", searchResults);
+        return "products/product-list";
+    }
+
+    @GetMapping
+    public String showProductList(Model model) {
+        model.addAttribute("products", productService.getAllProducts());
+        return "products/product-list";
+    }
+
+    @GetMapping("/{id}")
+    public String showProductDetails(@PathVariable Long id, Model model) {
+        Product product = productService.getProductById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        model.addAttribute("product", product);
+        return "products/product-details";
     }
 
     @GetMapping("/add")
@@ -64,20 +82,23 @@ public class ProductController {
 
     @PostMapping("/add")
     public String addProduct(@Valid Product product, BindingResult result,
-                             @RequestParam("images") MultipartFile imageFile) {
+                             @RequestParam("images") MultipartFile imageFile, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "products/add-product";
         }
         try {
             if (!imageFile.isEmpty()) {
-                byte[] bytes = imageFile.getBytes();
-                Path path = Paths.get("src/main/resources/static/images/" + imageFile.getOriginalFilename());
-                Files.write(path, bytes);
-                product.setImage(imageFile.getOriginalFilename());
+                String filename = imageFile.getOriginalFilename();
+                Path path = Paths.get(uploadPath, filename);
+                Files.write(path, imageFile.getBytes());
+                product.setImage(filename);
+                product.setImageUrl("/images/" + filename);
             }
             productService.addProduct(product);
         } catch (IOException e) {
             e.printStackTrace();
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "products/add-product";
         }
         return "redirect:/products";
