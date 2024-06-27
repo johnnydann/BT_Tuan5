@@ -82,20 +82,23 @@ public class ProductController {
 
     @PostMapping("/add")
     public String addProduct(@Valid Product product, BindingResult result,
-                             @RequestParam("images") MultipartFile imageFile) {
+                             @RequestParam("images") MultipartFile imageFile, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "products/add-product";
         }
         try {
             if (!imageFile.isEmpty()) {
-                byte[] bytes = imageFile.getBytes();
-                Path path = Paths.get("src/main/resources/static/images/" + imageFile.getOriginalFilename());
-                Files.write(path, bytes);
-                product.setImage(imageFile.getOriginalFilename());
+                String filename = imageFile.getOriginalFilename();
+                Path path = Paths.get(uploadPath, filename);
+                Files.write(path, imageFile.getBytes());
+                product.setImage(filename);
+                product.setImageUrl("/images/" + filename);
             }
             productService.addProduct(product);
         } catch (IOException e) {
             e.printStackTrace();
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "products/add-product";
         }
         return "redirect:/products";

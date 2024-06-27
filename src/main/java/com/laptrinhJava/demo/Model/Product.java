@@ -25,4 +25,5 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<OrderDetail> orderDetails;
     private String image; // Path to the image
+    private String imageUrl; // Đường dẫn URL đến hình ảnh (nếu cần)
 }
