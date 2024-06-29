@@ -42,7 +42,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/",
-                                "/oauth/**", "/register", "/error", "/products", "/cart", "/cart/**")
+                                "/oauth/**", "/register", "/error", "/products/**", "/cart", "/cart/**")
                         .permitAll()
                         .requestMatchers("/products/edit/**", "/products/add", "/products/delete")
                         .hasAnyAuthority("ADMIN")
