@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
 @Getter
 @Setter
 @ToString
@@ -53,11 +52,9 @@ public class User implements UserDetails {
     private String address;
 
     @Column(name = "birthdate")
-    @NotNull(message = "Birthdate is required")
-    private String birthdate;
-
-    /*@Column(name = "provider", length = 50)
-    private String provider;*/
+    private LocalDate birthdate;
+    @Column(name = "provider", length = 50)
+    private String provider;
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -97,8 +94,8 @@ public class User implements UserDetails {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return
-                false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         User user = (User) o;
         return getId() != null && Objects.equals(getId(), user.getId());
     }

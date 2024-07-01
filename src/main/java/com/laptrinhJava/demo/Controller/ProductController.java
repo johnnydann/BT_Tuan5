@@ -6,6 +6,7 @@ import com.laptrinhJava.demo.Service.CategoryService;
 import com.laptrinhJava.demo.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,26 +47,41 @@ public class ProductController {
     public String searchProduct(@RequestParam("keyword") String keyword,
                                 @RequestParam(value = "category", required = false) Long categoryId,
                                 @RequestParam(value = "categoryName", required = false) String categoryName,
+                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(value = "size", defaultValue = "9") int size,
                                 Model model) {
-        List<Product> searchResults;
+        Page<Product> searchResults;
         if (categoryId != null) {
-            searchResults = productService.searchProductsByKeywordAndCategory(keyword, categoryId);
+            searchResults = productService.searchProductsByKeywordAndCategory(keyword, categoryId, page, size);
         } else if (categoryName != null && !categoryName.isEmpty()) {
-            searchResults = productService.searchProductsByKeywordAndCategoryName(keyword, categoryName);
+            searchResults = productService.searchProductsByKeywordAndCategoryName(keyword, categoryName, page, size);
         } else {
-            searchResults = productService.searchProducts(keyword);
+            searchResults = productService.searchProducts(keyword, page, size);
         }
         model.addAttribute("products", searchResults);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", searchResults.getTotalPages());
         return "products/product-list";
+    }
+
+    @GetMapping("/autocomplete")
+    public @ResponseBody List<Product> autocompleteProducts(@RequestParam("keyword") String keyword) {
+        return productService.autocompleteProducts(keyword);
     }
 
     @GetMapping
-    public String showProductList(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
+    public String showProductList(@RequestParam(value = "page", defaultValue = "0") int page,
+                                  @RequestParam(value = "size", defaultValue = "9") int size,
+                                  Model model) {
+        Page<Product> productPage = productService.getProductsPaginated(page, size);
+        model.addAttribute("products", productPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
         return "products/product-list";
     }
 
-    @GetMapping("/{id}")
+
+    @GetMapping("/details/{id}")
     public String showProductDetails(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
