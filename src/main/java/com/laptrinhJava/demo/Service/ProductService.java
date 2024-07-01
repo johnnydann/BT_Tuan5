@@ -3,6 +3,9 @@ package com.laptrinhJava.demo.Service;
 import com.laptrinhJava.demo.Model.Product;
 import com.laptrinhJava.demo.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotNull;
@@ -21,18 +24,22 @@ import java.util.UUID;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
+
     // Retrieve all products from the database
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
     // Retrieve a product by its id
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
+
     // Add a new product to the database
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
+
     // Update an existing product
     public Product updateProduct(@NotNull Product product) {
         Product existingProduct = productRepository.findById(product.getId())
@@ -46,6 +53,7 @@ public class ProductService {
         existingProduct.setQuantity(product.getQuantity());
         return productRepository.save(existingProduct);
     }
+
     // Delete a product by its id
     public void deleteProductById(Long id) {
         if (!productRepository.existsById(id)) {
@@ -53,6 +61,7 @@ public class ProductService {
         }
         productRepository.deleteById(id);
     }
+
     public void decreaseProductQuantity(Product product, int quantity) {
         if (product.getQuantity() >= quantity) {
             product.setQuantity(product.getQuantity() - quantity);
@@ -61,19 +70,32 @@ public class ProductService {
             throw new IllegalArgumentException("Not enough quantity in stock for product: " + product.getName());
         }
     }
-    public List<Product> searchProducts(String keyword) {
-        return productRepository.findByKeyword(keyword);
+
+    public Page<Product> getProductsPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAll(pageable);
     }
 
-    public List<Product> searchProductsByKeywordAndCategory(String keyword, Long categoryId) {
+    public Page<Product> searchProducts(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByKeyword(keyword, pageable);
+    }
+
+    public Page<Product> searchProductsByKeywordAndCategory(String keyword, Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         if (categoryId != null) {
-            return productRepository.findByKeywordAndCategory(keyword, categoryId);
+            return productRepository.findByKeywordAndCategory(keyword, categoryId, pageable);
         } else {
-            return productRepository.findByKeyword(keyword);
+            return productRepository.findByKeyword(keyword, pageable);
         }
     }
 
-    public List<Product> searchProductsByKeywordAndCategoryName(String keyword, String categoryName) {
-        return productRepository.findByKeywordAndCategoryName(keyword, categoryName);
+    public Page<Product> searchProductsByKeywordAndCategoryName(String keyword, String categoryName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByKeywordAndCategoryName(keyword, categoryName, pageable);
+    }
+
+    public List<Product> autocompleteProducts(String keyword) {
+        return productRepository.findTop5ByNameContaining(keyword); // Lấy top 5 sản phẩm chứa keyword trong tên
     }
 }

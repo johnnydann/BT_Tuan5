@@ -22,6 +22,7 @@ public class Order {
     private String shippingAddress;
     private String phoneNumber;
     private String notes;
+    private double totalPrice;
 
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;

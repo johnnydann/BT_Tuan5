@@ -1,5 +1,6 @@
 package com.laptrinhJava.demo.Security;
 
+import com.laptrinhJava.demo.Service.CustomOAuth2UserService;
 import com.laptrinhJava.demo.Service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserService userService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return userService; // Sử dụng chính `userService` đã được inject
     }
 
     @Bean
@@ -41,8 +43,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(@NotNull HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/",
-                                "/oauth/**", "/register", "/error", "/products", "/cart", "/cart/**")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/", "/oauth/**", "/register", "/error", "/products", "/cart", "/cart/**",
+                                                    "/products/search", "/products/autocomplete", "/products/details/**")
                         .permitAll()
                         .requestMatchers("/products/edit/**", "/products/add", "/products/delete")
                         .hasAnyAuthority("ADMIN")
@@ -68,6 +70,9 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .defaultSuccessUrl("/products")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
                 )
                 .rememberMe(rememberMe -> rememberMe
                         .key("hutech")
