@@ -25,6 +25,11 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
 
+
+    public List<Product> getProductsByCategoryName(String categoryName) {
+        return productRepository.findByCategoryName(categoryName);
+    }
+
     // Retrieve all products from the database
     public List<Product> getAllProducts() {
         return productRepository.findAll();

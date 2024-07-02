@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .vh-25 {
+            height: 25vh;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .display-1 {
+            font-size: 6rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fs-3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .lead {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            font-size: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        
+        .btn-primary:focus, .btn-primary.focus {
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Header content (optional) -->
+    </header>
+    <main>
+        <div class="d-flex align-items-center justify-content-center vh-25">
+            <div class="text-center">
+             <h1 id="dynamic-error" class="display-1 fw-blod">
+                    <span>L</span>
+                    <span>Ỗ</span>
+                    <span>i</span> 
+                </h1>
+                <p class="fs-3"><span style="color: #f00000;">Opps!</span> Lỗi không xác định</p> <!-- Thay đổi thông điệp -->
+                <p class="lead">
+                    Quay lại trang chủ
+                </p>
+                <a href="/" class="btn btn-primary">Back to homepage</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <!-- Footer content (optional) -->
+    </footer>
+    <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Lấy danh sách các span và gán màu ngẫu nhiên cho mỗi span
+        var spans = document.querySelectorAll('.display-1 span');
+        spans.forEach(function(span) {
+            span.style.color = getRandomColor();
+        });
+    </script>
+</body>
+</html>

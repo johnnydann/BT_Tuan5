@@ -96,10 +96,9 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Category
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li sec:authorize="hasAnyAuthority('ADMIN')"><a class="dropdown-item" href="/categories/add">Add
-                                    Category</a></li>
+                                <li sec:authorize="hasAnyAuthority('ADMIN')"><a class="dropdown-item" href="/categories/add">Add Category</a></li>
                                 <li th:each="category : ${categories}">
-                                    <a class="dropdown-item" th:text="${category.name}"></a>
+                                    <a class="dropdown-item" th:text="${category.name}" th:href="@{/products/byCategory(categoryName=${category.name})}"></a>
                                 </li>
                             </div>
                         </div>
