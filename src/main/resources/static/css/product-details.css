@@ -1,0 +1,89 @@
+/* Đặt nền và định dạng cho toàn bộ trang */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Định dạng cho khu vực chứa chi tiết sản phẩm */
+.product-details {
+    padding: 40px 0;
+}
+
+.product-details .container {
+    max-width: 1000px; /* Tăng chiều rộng tối đa của container */
+    margin: 0 auto;
+}
+
+.product-details h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: #343a40;
+}
+
+/* Định dạng cho thẻ card */
+.product-details .card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.product-details .card-body {
+    padding: 20px;
+}
+
+/* Định dạng cho ảnh sản phẩm */
+.product-details .product-image {
+    width: 100%;
+    height: 400px; /* Tăng chiều cao ảnh sản phẩm */
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Định dạng cho thông tin sản phẩm */
+.product-details .product-info {
+    padding: 10px 0;
+}
+
+.product-details .product-info p {
+    margin: 10px 0;
+    color: #495057;
+}
+
+.product-details .product-info strong {
+    display: inline-block;
+    width: 100px;
+}
+
+/* Định dạng cho form thêm vào giỏ hàng */
+.product-details .add-to-cart-form {
+    margin-top: 20px;
+}
+
+.product-details .quantity-input {
+    width: 100px;
+}
+
+.product-details .btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Định dạng cho nút quay lại */
+.product-details .back-btn {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #000; /* Đặt màu nền đen */
+    color: #fff; /* Đặt màu chữ trắng */
+    text-decoration: none;
+}
+
+/* Hiệu ứng hover cho các nút */
+.product-details .btn:hover,
+.product-details .back-btn:hover {
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}

@@ -1,0 +1,50 @@
+/* Định dạng chung */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Định dạng cho phần form đặt hàng */
+.order-form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+}
+
+.order-form h1 {
+    color: #343a40;
+    margin-bottom: 30px;
+}
+
+.order-form label {
+    color: #343a40;
+}
+
+.order-form input.form-control,
+.order-form textarea.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.order-form button.btn-dark {
+    background-color: #343a40; /* Màu đen */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.order-form button.btn-dark:hover {
+    background-color: #1d2124; /* Màu đậm hơn khi hover */
+}
+
+/* Responsive styles */
+@media (max-width: 576px) {
+    .order-form {
+        padding: 20px;
+    }
+}
