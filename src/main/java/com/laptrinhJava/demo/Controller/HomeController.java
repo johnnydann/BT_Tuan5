@@ -9,8 +9,8 @@ public class HomeController {
     public HomeController() {
     }
 
-    @GetMapping({"/"})
+    @GetMapping({"/home"})
     public RedirectView redirectToProducts() {
-        return new RedirectView("/products");
+        return new RedirectView("/welcome");
     }
 }
