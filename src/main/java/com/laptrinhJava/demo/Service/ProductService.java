@@ -26,8 +26,8 @@ public class ProductService {
     private final ProductRepository productRepository;
 
 
-    public List<Product> getProductsByCategory(String categoryName) {
-        return productRepository.findByCategoryName(categoryName);
+    public Page<Product> getProductsByCategory(String categoryName, int page, int size) {
+        return productRepository.findByCategoryName(categoryName, PageRequest.of(page, size));
     }
 
     // Retrieve all products from the database

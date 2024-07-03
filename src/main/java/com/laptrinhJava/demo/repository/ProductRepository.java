@@ -25,6 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Hàm tìm kiếm các sản phẩm có tên chứa từ khóa, giới hạn top 5
     List<Product> findTop5ByNameContaining(String keyword);
 
-    List<Product> findByCategoryName(String categoryName);
+    Page<Product> findByCategoryName(String categoryName, Pageable pageable);
 
 }

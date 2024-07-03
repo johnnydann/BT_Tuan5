@@ -21,10 +21,9 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    @ResponseBody
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity) {
         cartService.addToCart(productId, quantity);
-        return "Product added to cart successfully!";
+        return "redirect:/cart";
     }
 
     @PostMapping("/increase/{productId}")
