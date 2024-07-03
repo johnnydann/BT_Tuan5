@@ -79,90 +79,6 @@
    </div>
    <!-- logo section end -->
    <!-- header section start -->
-   <div class="header_section">
-      <div class="container">
-         <div class="containt_main">
-            <div id="mySidenav" class="sidenav">
-               <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-               <a href="/products">Home</a>
-               <!--                            <a href="/fashion.html">Fashion</a>-->
-               <!--                            <a href="/electronic.html">Electronic</a>-->
-               <!--                            <a href="/jewellery.html">Jewellery</a>-->
-            </div>
-            <span class="toggle_icon" onclick="openNav()"><img src="/images/toggle-icon.png"></span>
-            <div class="dropdown">
-               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Category
-               </button>
-               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li th:each="category : ${categories}">
-                     <a class="dropdown-item" th:text="${category.name}" th:href="@{/products/category/{categoryName}(categoryName=${category.name})}"></a>
-                  </li>
-               </div>
-            </div>
-            <div class="main">
-               <!-- Another variation with a button -->
-               <form class="d-flex" th:action="@{/products/search}" method="get">
-                  <div class="input-group position-relative">
-                     <input id="search-input" class="form-control" type="search" placeholder="Search product..." aria-label="Search" name="keyword">
-                     <select class="form-select" name="category">
-                        <option value="">Bộ lọc</option>
-                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                     </select>
-                     <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit" style="background-color: #f26522; border-color: #f26522;">
-                           <i class="fa fa-search"></i>
-                        </button>
-                     </div>
-
-                     <!-- Dropdown gợi ý tìm kiếm -->
-                     <div id="search-suggestions" class="dropdown-menu dropdown-menu-start" style="width: 100%; display: none;">
-                        <!-- Các gợi ý sẽ được thêm vào đây từ JavaScript -->
-                     </div>
-                  </div>
-               </form>
-
-               <style>
-                  #search-suggestions {
-                      position: absolute;
-                      z-index: 100;
-                      top: 100%; /* Hiển thị ngay dưới thanh tìm kiếm */
-                      left: 0;
-                      width: 100%; /* Độ rộng bằng với thanh tìm kiếm */
-                      margin-top: 0; /* Không cần margin-top âm nữa */
-                      transform: none; /* Không cần transform */
-                  }
-               </style>
-            </div>
-            <div class="header_box">
-               <div class="login_menu">
-                  <ul>
-                     <li>
-                        <a href="/cart">
-                           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                           <span class="padding_10">Cart</span>
-                        </a>
-                     </li>
-                     <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
-                        <a class="navbar-text text-white"><span sec:authentication="name"
-                                                                style="margin-right: 20px;"></span></a>
-                     </li>
-                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <form th:action="@{/logout}" method="post">
-                           <button class="btn btn-outline-light" type="submit">Logout</button>
-                        </form>
-                     </li>
-                     <li class="nav-item" sec:authorize="!isAuthenticated()" > <a href="/login">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="padding_10">Login</span></a>
-                        </a>
-                     </li>
-                  </ul>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
    <!-- header section end -->
    <!-- banner section start -->
    <div class="banner_section layout_padding">
@@ -173,7 +89,7 @@
                   <div class="row">
                      <div class="col-sm-12">
                         <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-                        <div class="buynow_bt"><a href="/#">Buy Now</a></div>
+                        <div class="buynow_bt"><a href="/products">Buy Now</a></div>
                      </div>
                   </div>
                </div>
@@ -209,40 +125,26 @@
          <div class="carousel-inner">
             <div class="carousel-item active">
                <div class="container">
-                  <h1 class="fashion_taital">Man & Woman Fashion</h1>
                   <div class="fashion_section_2">
                      <div class="row">
                         <div class="col-lg-4 col-sm-4">
                            <div class="box_main">
-                              <h4 class="shirt_text">Man T -shirt</h4>
-                              <p class="price_text">Price  <span style="color: #262626;">$ 30</span></p>
-                              <div class="tshirt_img"><img src="images/tshirt-img.png"></div>
-                              <div class="btn_main">
-                                 <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                 <div class="seemore_bt"><a href="#">See More</a></div>
-                              </div>
+                              <div class="tshirt_img"><img src="../../static/images/lavalavendermix.jpg"
+                                                                       height="560" width="560"/></div>
                            </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
                            <div class="box_main">
-                              <h4 class="shirt_text">Man -shirt</h4>
-                              <p class="price_text">Price  <span style="color: #262626;">$ 30</span></p>
-                              <div class="tshirt_img"><img src="images/dress-shirt-img.png"></div>
-                              <div class="btn_main">
-                                 <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                 <div class="seemore_bt"><a href="#">See More</a></div>
-                              </div>
+                              <div class="tshirt_img"><img
+                                      src="../../static/images/28992511x2_samsung-galaxy-s24-ultra__color_titanium-gray_16006596.png.1000x1000-w.m80.jpg"
+                                      height="1000" width="1000"/></div>
                            </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
                            <div class="box_main">
-                              <h4 class="shirt_text">Woman Scart</h4>
-                              <p class="price_text">Price  <span style="color: #262626;">$ 30</span></p>
-                              <div class="tshirt_img"><img src="images/women-clothes-img.png"></div>
-                              <div class="btn_main">
-                                 <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                 <div class="seemore_bt"><a href="#">See More</a></div>
-                              </div>
+                              <div class="tshirt_img"><img
+                                      src="../../static/images/31942005x2_iphone-15-pro-max__color_natural-titanium_16005972.png.1000x1000-w.m80.jpg"
+                                      height="1000" width="1000"/></div>
                            </div>
                         </div>
                      </div>
@@ -257,12 +159,8 @@
                         <div class="col-lg-4 col-sm-4">
                            <div class="box_main">
                               <h4 class="shirt_text">Man T -shirt</h4>
-                              <p class="price_text">Price  <span style="color: #262626;">$ 30</span></p>
                               <div class="tshirt_img"><img src="images/tshirt-img.png"></div>
-                              <div class="btn_main">
-                                 <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                 <div class="seemore_bt"><a href="#">See More</a></div>
-                              </div>
+
                            </div>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -389,11 +287,10 @@
       }
    </script>
 
-   gắn cái script vào cuối trang layout (trên /body) :
    <script>
       function openNav() {
         document.getElementById("mySidenav").style.width = "250px";
-      }
+      }t
 
       function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
