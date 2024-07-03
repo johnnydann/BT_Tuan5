@@ -44,7 +44,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/", "/oauth/**", "/register", "/error", "/products", "/cart", "/cart/**",
-                                                    "/products/search", "/products/autocomplete", "/products/details/**", "/error", "/products/category/{categoryName}/**")
+                                                    "/products/search", "/products/autocomplete", "/products/details/**", "/error", "/products/category/{categoryName}/**", "/home/welcome")
                         .permitAll()
                         .requestMatchers("/products/edit/**", "/products/add", "/products/delete")
                         .hasAnyAuthority("ADMIN")
