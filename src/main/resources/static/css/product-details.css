@@ -10,8 +10,9 @@ body {
 }
 
 .product-details .container {
-    max-width: 1000px; /* Tăng chiều rộng tối đa của container */
+    max-width: 1000px;
     margin: 0 auto;
+    padding-top: 20px; /* Thêm padding top cho container */
 }
 
 .product-details h1 {
@@ -22,8 +23,16 @@ body {
 
 /* Định dạng cho thẻ card */
 .product-details .card {
+    border: 1px solid #dee2e6;
     border-radius: 10px;
     overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    max-width: 100%;
+}
+
+.product-details .card:hover {
+    transform: translateY(-5px);
 }
 
 .product-details .card-body {
@@ -33,10 +42,15 @@ body {
 /* Định dạng cho ảnh sản phẩm */
 .product-details .product-image {
     width: 100%;
-    height: 400px; /* Tăng chiều cao ảnh sản phẩm */
-    object-fit: cover;
+    height: 400px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-details .product-image:hover {
+    transform: scale(1.05);
 }
 
 /* Định dạng cho thông tin sản phẩm */
@@ -56,16 +70,33 @@ body {
 
 /* Định dạng cho form thêm vào giỏ hàng */
 .product-details .add-to-cart-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
 }
 
 .product-details .quantity-input {
-    width: 100px;
+    width: 60px; /* Làm cho thanh số lượng nhỏ hơn */
+    height: 30px; /* Giảm chiều cao của thanh số lượng */
+    font-size: 1rem; /* Giảm kích thước chữ */
+    text-align: center;
 }
 
 .product-details .btn-block {
     display: block;
-    width: 100%;
+    width: auto; /* Đặt width là auto để làm nút nhỏ hơn */
+}
+
+.product-details .btn-warning {
+    background-color: #3b50529c;
+    border: none;
+    padding: 8px 16px; /* Giảm padding để làm nút nhỏ hơn */
+    font-size: 0.9rem; /* Giảm kích thước chữ của nút */
+}
+
+.product-details .btn-warning i {
+    font-size: 1rem; /* Giảm kích thước của icon */
 }
 
 /* Định dạng cho nút quay lại */
@@ -76,8 +107,8 @@ body {
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 5px;
-    background-color: #000; /* Đặt màu nền đen */
-    color: #fff; /* Đặt màu chữ trắng */
+    background-color: #000;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -87,3 +118,16 @@ body {
     opacity: 0.9;
     transition: opacity 0.3s;
 }
+
+/* Success popup CSS */
+.success-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: none;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,

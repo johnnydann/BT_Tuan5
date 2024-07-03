@@ -1,0 +1,141 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    padding-top: 20px;
+}
+
+.card-text.price {
+    font-size: 1.5rem; /* Kích thước chữ to hơn */
+    font-weight: bold; /* Đậm hơn */
+    color: #000; /* Màu đen đậm hơn */
+}
+
+.product-card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    max-width: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.image-holder {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+}
+
+.image-holder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.overlay a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.image-holder:hover .overlay {
+    opacity: 1;
+}
+
+.product-card .card-body {
+    padding: 20px;
+}
+
+.product-card .card-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.product-card .card-text {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.add-to-cart-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-to-cart-form input[type="number"] {
+    display: none;
+}
+
+.btn-warning {
+    background-color: #3b50529c;
+    border: none;
+}
+
+.btn-warning i {
+    font-size: 1.2rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff;
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Success popup CSS */
+.success-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: none;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
