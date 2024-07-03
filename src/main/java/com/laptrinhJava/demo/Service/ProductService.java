@@ -26,7 +26,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
 
-    public List<Product> getProductsByCategoryName(String categoryName) {
+    public List<Product> getProductsByCategory(String categoryName) {
         return productRepository.findByCategoryName(categoryName);
     }
 

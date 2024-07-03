@@ -43,11 +43,12 @@ public class ProductController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/byCategory")
-    public String showProductsByCategory(@RequestParam("categoryName") String categoryName, Model model) {
-        List<Product> products = productService.getProductsByCategoryName(categoryName);
+    @RequestMapping("/category/{categoryName}")
+    public String getProductsByCategory(@PathVariable("categoryName") String categoryName, Model model) {
+        List<Product> products = productService.getProductsByCategory(categoryName);
         model.addAttribute("products", products);
-        return "products/product-list";
+        model.addAttribute("categoryName", categoryName);
+        return "products/products_by_category";
     }
 
     @GetMapping("/search")
@@ -96,109 +97,4 @@ public class ProductController {
         return "products/product-details";
     }
 
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("product", new Product());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "products/add-product";
-    }
-
-    @PostMapping("/add")
-    public String addProduct(@Valid Product product, BindingResult result,
-                             @RequestParam("images") MultipartFile imageFile, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "products/add-product";
-        }
-        try {
-            if (!imageFile.isEmpty()) {
-                String filename = imageFile.getOriginalFilename();
-                Path path = Paths.get(uploadPath, filename);
-                Files.write(path, imageFile.getBytes());
-                product.setImage(filename);
-                product.setImageUrl("/images/" + filename);
-            }
-            productService.addProduct(product);
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "products/add-product";
-        }
-        return "redirect:/products";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
-        model.addAttribute("product", product);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "products/update-product";
-    }
-
-    @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable Long id, @Valid Product product,
-                                @RequestParam(value = "images", required = false) MultipartFile imageProduct,
-                                BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            product.setId(id);
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "products/update-product";
-        }
-
-        // Get the existing product from the database
-        Product existingProduct = productService.getProductById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
-
-        // Update fields that are allowed to be updated
-        existingProduct.setName(product.getName());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setCategory(product.getCategory());
-        existingProduct.setQuantity(product.getQuantity());
-
-        // Handle image update
-        if (imageProduct != null && !imageProduct.isEmpty()) {
-            try {
-                // Save new image if provided
-                Path saveDirectoryPath = Paths.get("src/main/resources/static/images");
-                Files.createDirectories(saveDirectoryPath);
-
-                String newImageFile = UUID.randomUUID() + ".png";
-                Path path = saveDirectoryPath.resolve(newImageFile);
-                Files.copy(imageProduct.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                existingProduct.setImage(newImageFile);
-
-                logger.info("Image saved at: " + path.toString());
-                logger.info("Product image file name: " + existingProduct.getImage());
-
-                // Delete old image file if exists and different from new one
-                String oldImageFile = product.getImage();
-                if (oldImageFile != null && !oldImageFile.equals(newImageFile)) {
-                    Path oldPath = saveDirectoryPath.resolve(oldImageFile);
-                    Files.deleteIfExists(oldPath);
-                    logger.info("Deleted old image file: " + oldPath.toString());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                model.addAttribute("product", product);
-                model.addAttribute("categories", categoryService.getAllCategories());
-                model.addAttribute("errorMessage", "Error saving image");
-                return "products/update-product";
-            }
-        }
-
-        // Update the product in the database
-        productService.updateProduct(existingProduct);
-
-        return "redirect:/products";
-    }
-
-
-
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProductById(id);
-        return "redirect:/products";
-    }
 }
